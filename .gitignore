@@ -22,3 +22,10 @@ Thumbs.db
 # Temporary files
 /tmp/
 *.tmp
+
+# Private documentation (DO NOT COMMIT)
+SOLUCIONES_PRIVADAS.md
+*SOLUCIONES*.md
+*PRIVADAS*.md
+soluciones/
+private/
