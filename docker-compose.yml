@@ -1,0 +1,85 @@
+version: '3.8'
+
+services:
+  # Servidor en DMZ - Punto de entrada inicial
+  dmz_server:
+    build:
+      context: .
+      dockerfile: Dockerfiles/base.Dockerfile
+    container_name: dmz_server
+    hostname: dmz-server
+    networks:
+      dmz_network:
+        ipv4_address: 192.16.0.10
+    cap_add:
+      - NET_ADMIN
+    environment:
+      - SERVER_TYPE=dmz
+      - SSH_USER=alumno
+      - SSH_PASS=vulnerable123
+    volumes:
+      - ./configs/setup.sh:/setup.sh
+    command: /bin/bash /setup.sh
+
+  # Host PIVOT - Conectado a ambas redes
+  pivot_host:
+    build:
+      context: .
+      dockerfile: Dockerfiles/pivot.Dockerfile
+    container_name: pivot_host
+    hostname: pivot-host
+    networks:
+      dmz_network:
+        ipv4_address: 192.16.0.20
+      internal_network:
+        ipv4_address: 172.16.0.20
+    cap_add:
+      - NET_ADMIN
+    environment:
+      - SERVER_TYPE=pivot
+      - SSH_USER=sysadmin
+      - SSH_PASS=access2024
+    volumes:
+      - ./configs/setup.sh:/setup.sh
+    command: /bin/bash /setup.sh
+
+  # Servidor objetivo en red interna
+  internal_server:
+    build:
+      context: .
+      dockerfile: Dockerfiles/base.Dockerfile
+    container_name: internal_server
+    hostname: internal-server
+    networks:
+      internal_network:
+        ipv4_address: 172.16.0.30
+    cap_add:
+      - NET_ADMIN
+    environment:
+      - SERVER_TYPE=internal
+      - SSH_USER=root
+      - SSH_PASS=secretdata999
+      - FLAG=FLAG{C0ngr4ts_Y0u_M4st3r_P1v0t1ng}
+    volumes:
+      - ./configs/setup.sh:/setup.sh
+    command: /bin/bash /setup.sh
+
+networks:
+  dmz_network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 192.16.0.0/16
+          gateway: 192.16.0.1
+    driver_opts:
+      com.docker.network.bridge.name: br-dmz
+
+  internal_network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.16.0.0/16
+          gateway: 172.16.0.1
+    driver_opts:
+      com.docker.network.bridge.name: br-internal
+    internal: true
