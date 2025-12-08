@@ -488,25 +488,6 @@ Prepara un informe profesional de pentesting que incluya:
 
 ---
 
-## 📊 Criterios de Evaluación Global
-
-| Criterio | Puntos | Descripción |
-|----------|---------|-------------|
-| Ejercicio 1 | 5 | Reconocimiento básico |
-| Ejercicio 2 | 10 | Identificación del pivot |
-| Ejercicio 3 | 15 | Local Port Forwarding |
-| Ejercicio 4 | 15 | Dynamic Port Forwarding |
-| Ejercicio 5 | 15 | Remote Port Forwarding |
-| Ejercicio 6 | 10 | ProxyJump |
-| Ejercicio 7 | 10 | Exfiltración de datos |
-| Ejercicio 8 | 10 | Relay con Netcat |
-| Desafío Final | 100 | Escenario completo |
-| Documentación | 10 | Calidad de la documentación |
-| **Total Básico** | **100** | Ejercicios 1-8 + Docs |
-| **Total Avanzado** | **200** | Básico + Desafío Final |
-
----
-
 ## 💡 Tips Generales
 
 ### Para Todos los Ejercicios
