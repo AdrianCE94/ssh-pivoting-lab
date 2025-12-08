@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(docker compose ps:*)",
+      "Bash(docker compose:*)",
+      "Bash(docker network:*)",
+      "Bash(dos2unix:*)",
+      "Bash(docker exec:*)",
+      "Bash(git add:*)",
+      "Bash(git commit -m \"$(cat <<''EOF''\n🐛 Fix critical deployment issues\n\n- Fix heredoc syntax error in setup.sh (SShD_EOF -> SSHD_EOF)\n- Remove obsolete version field from docker-compose.yml\n- Convert setup.sh line endings to Unix format (LF)\n\nThese fixes resolve container startup failures.\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude Sonnet 4.5 <noreply@anthropic.com>\nEOF\n)\")",
+      "Bash(git commit:*)",
+      "Bash(git push)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

@@ -42,6 +42,11 @@ echo "🚀 Desplegando laboratorio..."
 $COMPOSE_CMD up -d
 
 echo ""
+echo "🔁 Forzando recreación de 'internal_server' para aplicar cambios de configuración..."
+# Recrear solo el servicio interno para que vuelva a ejecutarse /setup.sh y aplique SSH_PASS
+$COMPOSE_CMD up -d --force-recreate --no-deps internal_server || true
+
+echo ""
 echo "⏳ Esperando que los servicios estén listos..."
 sleep 15
 

@@ -16,15 +16,27 @@ Subsystem sftp /usr/lib/openssh/sftp-server
 SSHD_EOF
 
 # Crear usuario SSH si está especificado
+# Crear usuario SSH si está especificado
 if [ ! -z "$SSH_USER" ]; then
-    useradd -m -s /bin/bash $SSH_USER
-    echo "$SSH_USER:$SSH_PASS" | chpasswd
-    echo "✓ Usuario $SSH_USER creado con éxito"
+    if [ "$SSH_USER" = "root" ]; then
+        # Si el usuario objetivo es root, usar la contraseña provista en SSH_PASS
+        if [ ! -z "$SSH_PASS" ]; then
+            echo "root:$SSH_PASS" | chpasswd
+            echo "✓ Password de root configurado desde SSH_PASS"
+        else
+            echo "Aviso: SSH_USER=root pero SSH_PASS no está definido; se mantiene la contraseña actual de root"
+        fi
+    else
+        # Crear usuario no-root (ignorar error si ya existe)
+        useradd -m -s /bin/bash "$SSH_USER" 2>/dev/null || true
+        if [ ! -z "$SSH_PASS" ]; then
+            echo "$SSH_USER:$SSH_PASS" | chpasswd
+        fi
+        echo "✓ Usuario $SSH_USER creado o actualizado con éxito"
+    fi
 fi
 
-# Configurar password de root
-echo "root:rootpass123" | chpasswd
-echo "✓ Password de root configurado"
+# Si no se configuró la contraseña de root arriba, dejarla intacta (evitar sobrescribirla por defecto)
 
 # Configurar flag si existe (para el servidor interno)
 if [ ! -z "$FLAG" ]; then
