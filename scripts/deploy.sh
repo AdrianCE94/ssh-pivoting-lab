@@ -15,9 +15,14 @@ if ! command -v docker &> /dev/null; then
 fi
 
 # Verificar Docker Compose
-if ! command -v docker-compose &> /dev/null && ! docker compose version &> /dev/null; then
-    echo "❌ Docker Compose no está instalado."
-    exit 1
+COMPOSE_CMD="docker compose"
+if ! docker compose version &> /dev/null; then
+    if command -v docker-compose &> /dev/null; then
+        COMPOSE_CMD="docker-compose"
+    else
+        echo "❌ Docker Compose no está instalado."
+        exit 1
+    fi
 fi
 
 echo "✓ Docker y Docker Compose detectados"
@@ -25,16 +30,16 @@ echo ""
 
 # Limpiar despliegues anteriores
 echo "🧹 Limpiando contenedores previos..."
-docker-compose down -v 2>/dev/null || true
+$COMPOSE_CMD down -v 2>/dev/null || true
 docker network prune -f 2>/dev/null || true
 
 echo ""
 echo "🏗️  Construyendo imágenes (puede tomar unos minutos)..."
-docker-compose build --no-cache
+$COMPOSE_CMD build --no-cache
 
 echo ""
 echo "🚀 Desplegando laboratorio..."
-docker-compose up -d
+$COMPOSE_CMD up -d
 
 echo ""
 echo "⏳ Esperando que los servicios estén listos..."
@@ -70,7 +75,7 @@ echo "📋 COMANDOS ÚTILES:"
 echo ""
 echo "  Conectar al DMZ:    ssh alumno@192.16.0.10"
 echo "  Ver estado:         ./scripts/check-status.sh"
-echo "  Ver logs:           docker-compose logs -f"
+echo "  Ver logs:           $COMPOSE_CMD logs -f"
 echo "  Limpiar todo:       ./scripts/cleanup.sh"
 echo ""
 echo "📚 Consulta docs/EJERCICIOS.md para comenzar"

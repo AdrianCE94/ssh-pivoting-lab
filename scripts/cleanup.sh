@@ -11,9 +11,17 @@ if [[ ! "$confirm" =~ ^[Ss]$ ]]; then
     exit 0
 fi
 
+# Detectar comando compose
+COMPOSE_CMD="docker compose"
+if ! docker compose version &> /dev/null; then
+    if command -v docker-compose &> /dev/null; then
+        COMPOSE_CMD="docker-compose"
+    fi
+fi
+
 echo ""
 echo "🧹 Deteniendo contenedores..."
-docker-compose down -v
+$COMPOSE_CMD down -v
 
 echo "🗑️  Eliminando imágenes del laboratorio..."
 docker rmi $(docker images | grep 'ssh-pivoting-lab' | awk '{print $3}') 2>/dev/null || true

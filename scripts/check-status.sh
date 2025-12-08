@@ -5,8 +5,16 @@ echo "║        ESTADO DEL LABORATORIO SSH PIVOTING       ║"
 echo "╚══════════════════════════════════════════════════╝"
 echo ""
 
+# Detectar comando compose
+COMPOSE_CMD="docker compose"
+if ! docker compose version &> /dev/null; then
+    if command -v docker-compose &> /dev/null; then
+        COMPOSE_CMD="docker-compose"
+    fi
+fi
+
 echo "📦 CONTENEDORES:"
-docker-compose ps
+$COMPOSE_CMD ps
 
 echo ""
 echo "🌐 REDES:"
