@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   # Servidor en DMZ - Punto de entrada inicial
   dmz_server:

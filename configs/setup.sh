@@ -13,7 +13,7 @@ X11Forwarding yes
 PrintMotd no
 AcceptEnv LANG LC_*
 Subsystem sftp /usr/lib/openssh/sftp-server
-SShD_EOF
+SSHD_EOF
 
 # Crear usuario SSH si está especificado
 if [ ! -z "$SSH_USER" ]; then
